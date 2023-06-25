@@ -1,22 +1,31 @@
 #include <Servo.h>
 
-Servo ESC1, ESC2, ESC3, ESC4;     // create servo object to control the ESC
+Servo esc1, esc2;
 
-int potValue;  // value from the analog pin
+int potX = 1;
+int potY = 2;
+int potValueX;
+int potValueY;
 
-void setup() {
-  // Attach the ESC on pin 9
-  ESC1.attach(9);
-  //ESC2.attach(10);
-  //ESC3.attach(11);
-  //ESC4.attach(12);
+void setup() {                
+  esc1.attach(9);
+  esc2.attach(10);
+  Serial.begin(9600);
 }
 
 void loop() {
-  potValue = analogRead(A0);   // reads the value of the potentiometer (value between 0 and 1023)
-  potValue = map(potValue, 0, 1023, 0, 400);   // scale it to use it with the servo library (value between 0 and 180)
-  ESC1.write(potValue);    // Send the signal to the ESC
-  //ESC2.write(potValue); 
-  //ESC3.write(potValue); 
-  //ESC4.write(potValue); 
+  potValueX = analogRead(potX);
+  potValueY = analogRead(potY);
+
+  potValueX = map(potValueX, 0, 1023, -5, 5) + 45;
+  potValueY = map(potValueY, 0, 1023, -5, 5) + 45;
+
+  esc1.write(potValueX);
+  esc2.write(potValueY);
+
+  Serial.print(potValueX);
+  Serial.print("\t");
+  Serial.print(potValueY);
+  Serial.println();
+  delay(200);
 }
