@@ -1,16 +1,17 @@
-int potX = 1;
-int potY = 2;
+#include "defines.h"
 
-
+//Init Functions
 void setup() {                
-  init_esc(0, 9);
-  init_esc(1, 10);
-  Serial.begin(9600);
+  init_esc(ESC0);
+  init_esc(ESC1);
+  Serial.begin(default_baud);
 }
 
+//Run Functions
 void loop() {
-  run_esc(potX, 0);
-  run_esc(potY, 1);
+  run_esc(ESC0);
+  run_esc(ESC1);
+
   Serial.println();
-  delay(200);
+  //delay(200);
 }

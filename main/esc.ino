@@ -1,20 +1,24 @@
 #include <Servo.h>
 
-Servo esc[3];
+//ESC Map
+Servo esc[2];
+int analog_pin[] = {1, 2};
+int read_pin[] = {9, 10};
 
 int potValue;
 
-void init_esc(int index, int pin) {
-  esc[index].attach(pin);
+//-------------Basic Functions------------//
+void init_esc(int index) {
+  esc[index].attach(read_pin[index]);
 }
 
 void write_esc(int index, int value) {
   esc[index].write(value);
 }
 
-
-void run_esc(int pot_index, int esc_index) {
-  potValue = analogRead(pot_index);
+//------------Run Functions------------//
+void run_esc(int esc_index) {
+  potValue = analogRead(analog_pin[esc_index]);
   potValue = map(potValue, 0, 1023, -5, 5) + 45;
 
   write_esc(esc_index, potValue);
