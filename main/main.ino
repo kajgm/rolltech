@@ -17,15 +17,15 @@ void loop() {
   potValueX = analogRead(potX);
   potValueY = analogRead(potY);
 
-  potValueX = map(potValueX, 0, 1023, -5, 5) + 45;
-  potValueY = map(potValueY, 0, 1023, -5, 5) + 45;
+  potValueX = map(potValueX, 0, 1023, -10, 10) + 40;
+  potValueY = map(potValueY, 0, 1023, -10, 10) + 40;
 
   esc1.write(potValueX);
   esc2.write(potValueY);
 
-  Serial.print(potValueX);
-  Serial.print("\t");
-  Serial.print(potValueY);
-  Serial.println();
-  delay(200);
+  //Serial.print(potValueX);
+  //Serial.print("\t");
+  //Serial.print(potValueY);
+  //Serial.println();
+  //delay(200);
 }
