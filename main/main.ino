@@ -1,31 +1,17 @@
-#include <Servo.h>
+#include "defines.h"
 
-Servo esc1, esc2;
-
-int potX = 1;
-int potY = 2;
-int potValueX;
-int potValueY;
-
+//Init Functions
 void setup() {                
-  esc1.attach(9);
-  esc2.attach(10);
-  Serial.begin(9600);
+  init_esc(ESC0);
+  init_esc(ESC1);
+  Serial.begin(default_baud);
 }
 
+//Run Functions
 void loop() {
-  potValueX = analogRead(potX);
-  potValueY = analogRead(potY);
+  run_esc(ESC0);
+  run_esc(ESC1);
 
-  potValueX = map(potValueX, 0, 1023, -10, 10) + 40;
-  potValueY = map(potValueY, 0, 1023, -10, 10) + 40;
-
-  esc1.write(potValueX);
-  esc2.write(potValueY);
-
-  //Serial.print(potValueX);
-  //Serial.print("\t");
-  //Serial.print(potValueY);
-  //Serial.println();
+  Serial.println();
   //delay(200);
 }
