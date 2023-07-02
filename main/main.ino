@@ -53,7 +53,7 @@ void loop() {
   Serial.print(pwmOutputY);
   Serial.println();
 
-  if (abs(pwmOutputY) < 5 && rotDirection != -1){
+  if (abs(pwmOutputY) < 5 && rotDirection != 0){
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
     rotDirection = 0;
@@ -63,7 +63,7 @@ void loop() {
     digitalWrite(in2, LOW);
     rotDirection = 1;
 
-  } else if (pwmOutputY > 0 && rotDirection != 0) {
+  } else if (pwmOutputY > 0 && rotDirection != -1) {
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
     rotDirection = -1;
