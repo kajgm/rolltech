@@ -3,7 +3,7 @@
 #define inX 1 //Joystick X input
 #define inY 0 //Joystick Y input
 
-#define enA 9 //L298N Enable/Speed
+#define enA 5 //L298N Enable/Speed
 #define in1 6 //L298N In1
 #define in2 7 //L298N In2
 
