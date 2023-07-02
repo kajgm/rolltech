@@ -7,16 +7,21 @@
 #define in1 6 //L298N In1
 #define in2 7 //L298N In2
 
-#define sIN1 10
-#define sIN2 11
-#define sIN3 12
-#define sIN4 13
+#define sIN1 10 //ULN2003 In1
+#define sIN2 11 //ULN2003 In2
+#define sIN3 12 //ULN2003 In3
+#define sIN4 13 //ULN2003 In4
 
-int rotDirection = -1;
-int sign = 1;
+// Direction of rotation for Stepper motor
+// 0 = Stopped
+// 1 = CW
+// -1 = CCW
+int rotDirection = 0;
 
 // Defines the number of steps per rotation
 const int stepsPerRevolution = 2038;
+
+//Create stepper object
 Stepper stpr = Stepper(stepsPerRevolution, sIN1, sIN3, sIN2, sIN4);
 
 //[IN1 HIGH, IN2 LOW] - CCW
@@ -32,16 +37,17 @@ void setup() {
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
 
-  Serial.begin(9600);
+  Serial.begin(9600); //Debug
 }
 
 void loop() {
 
-  int potValueY = analogRead(inY); // Read potentiometer Y value
-  int pwmOutputY = map(potValueY, 0, 1023, -128, 128); // Map the potentiometer Y value from -128 to 128
-  int potValueX = analogRead(inX); // Read potentiometer X value
-  int pwmOutputX = map(potValueX, 0, 1023, -10, 10); // Map the potentiometer X value from -10 to 10
+  int potValueY = analogRead(inY); // Read joystick Y value
+  int pwmOutputY = map(potValueY, 0, 1023, -128, 128); // Map the joystick Y value from -128 to 128
+  int potValueX = analogRead(inX); // Read joystick X value
+  int pwmOutputX = map(potValueX, 0, 1023, -10, 10); // Map the joystick X value from -10 to 10
   
+  //Debug
   Serial.print(pwmOutputX);
   Serial.print("\t");
   Serial.print(pwmOutputY);
@@ -50,7 +56,7 @@ void loop() {
   if (abs(pwmOutputY) < 5 && rotDirection != -1){
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
-    rotDirection = -1;
+    rotDirection = 0;
 
   } else if (pwmOutputY < 0 && rotDirection != 1){
     digitalWrite(in1, HIGH);
@@ -60,19 +66,14 @@ void loop() {
   } else if (pwmOutputY > 0 && rotDirection != 0) {
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-    rotDirection = 0;
+    rotDirection = -1;
   }
 
   analogWrite(enA, abs(pwmOutputY)); // Send PWM signal to L298N Enable pin
 
   if (abs(pwmOutputX) > 2){
-    if (pwmOutputX > 0){
-      sign = 1;
-    } else {
-      sign = -1;
-    }
     stpr.setSpeed(abs(pwmOutputX) + 10);
-    stpr.step(sign * 10);
+    stpr.step(rotDirection * 10);
   }
 
 }
