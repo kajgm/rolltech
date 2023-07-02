@@ -12,11 +12,16 @@
 #define sIN3 12 //ULN2003 In3
 #define sIN4 13 //ULN2003 In4
 
-// Direction of rotation for Stepper motor
+//Jitter tolerances
+#define DCError 5
+#define StepError 2
+
+// Direction of rotation for controllers
 // 0 = Stopped
 // 1 = CW
 // -1 = CCW
-int rotDirection = 0;
+int DCDir = 0; //L298N
+int StepDir = 0; //ULN2003
 
 // Defines the number of steps per rotation
 const int stepsPerRevolution = 2038;
@@ -43,9 +48,9 @@ void setup() {
 void loop() {
 
   int potValueY = analogRead(inY); // Read joystick Y value
-  int pwmOutputY = map(potValueY, 0, 1023, -128, 128); // Map the joystick Y value from -128 to 128
+  int pwmOutputY = map(potValueY, 0, 1023, -255, 255); // Map the joystick Y value from -128 to 128
   int potValueX = analogRead(inX); // Read joystick X value
-  int pwmOutputX = map(potValueX, 0, 1023, -10, 10); // Map the joystick X value from -10 to 10
+  int pwmOutputX = map(potValueX, 0, 1023, -15, 15); // Map the joystick X value from -10 to 10
   
   //Debug
   Serial.print(pwmOutputX);
@@ -53,27 +58,35 @@ void loop() {
   Serial.print(pwmOutputY);
   Serial.println();
 
-  if (abs(pwmOutputY) < 5 && rotDirection != 0){
+  //DC motor movement (L298N)
+  if (abs(pwmOutputY) < DCError && DCDir != 0){
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
-    rotDirection = 0;
+    DCDir = 0;
 
-  } else if (pwmOutputY < 0 && rotDirection != 1){
+  } else if (pwmOutputY < 0 && DCDir != 1){
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
-    rotDirection = 1;
+    DCDir = 1;
 
-  } else if (pwmOutputY > 0 && rotDirection != -1) {
+  } else if (pwmOutputY > 0 && DCDir != -1) {
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-    rotDirection = -1;
+    DCDir = -1;
   }
 
   analogWrite(enA, abs(pwmOutputY)); // Send PWM signal to L298N Enable pin
 
-  if (abs(pwmOutputX) > 2){
-    stpr.setSpeed(abs(pwmOutputX) + 10);
-    stpr.step(rotDirection * 10);
+  //Stepper motor movement (ULN2003)
+  if (abs(pwmOutputX) < StepError){
+    StepDir = 0;
+  } else if (pwmOutputX < 0 && StepDir != 1){
+    StepDir = 1;
+  } else if (pwmOutputX > 0 && StepDir != -1) {
+    StepDir = -1;
   }
+
+  stpr.setSpeed(abs(pwmOutputX));
+  stpr.step(StepDir * 10);
 
 }
