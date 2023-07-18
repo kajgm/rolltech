@@ -14,7 +14,15 @@
 #define inX 0 //Joystick X input
 #define inY 1 //Joystick Y input
 
-RF24 radio(7, 8); // CE, CSN
+#define RED_PIN1 5
+#define GREEN_PIN1 6
+#define BLUE_PIN1 7
+
+#define RED_PIN2 2
+#define GREEN_PIN2 3
+#define BLUE_PIN2 4
+
+RF24 radio(9, 10); // CE, CSN
 
 const byte address[6] = "00001";
 
@@ -23,15 +31,48 @@ void setup() {
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
+
+  //setup led pins 1 and 2
+  pinMode(RED_PIN1, OUTPUT);
+  pinMode(GREEN_PIN1, OUTPUT);
+  pinMode(BLUE_PIN1, OUTPUT);
+
+  pinMode(RED_PIN2, OUTPUT);
+  pinMode(GREEN_PIN2, OUTPUT);
+  pinMode(BLUE_PIN2, OUTPUT);
+
+  //set leds to off
+  digitalWrite(RED_PIN1, LOW);
+  digitalWrite(GREEN_PIN1, LOW);
+  digitalWrite(BLUE_PIN1, LOW);
+
+  digitalWrite(RED_PIN2, LOW);
+  digitalWrite(GREEN_PIN2, LOW);
+  digitalWrite(BLUE_PIN2, LOW);
+
 }
 
 void loop() {
+
+  //assume full charge -will need to change
+  digitalWrite(RED_PIN2, LOW);
+  digitalWrite(GREEN_PIN2, HIGH);
+  digitalWrite(BLUE_PIN2, LOW);
 
   int potValueX = analogRead(inX); // Read joystick X value
   int pwmOutputX = map(potValueX, 0, 1023, -15, 15); // Map the joystick X value from -10 to 10
   int potValueY = analogRead(inY); // Read joystick Y value
   int pwmOutputY = map(potValueY, 0, 1023, -255, 255); // Map the joystick Y value from -128 to 128
 
+  if (abs(pwmOutputX) > 2 || abs(pwmOutputY) > 5){
+    digitalWrite(RED_PIN1, LOW);
+    digitalWrite(GREEN_PIN1, LOW);
+    digitalWrite(BLUE_PIN1, HIGH);
+  } else {
+    digitalWrite(RED_PIN1, LOW);
+    digitalWrite(GREEN_PIN1, LOW);
+    digitalWrite(BLUE_PIN1, LOW);
+  }
 
   const int buffer[2] = {pwmOutputX, pwmOutputY};
   radio.write(&buffer, sizeof(buffer));
