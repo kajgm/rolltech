@@ -25,6 +25,7 @@
 RF24 radio(9, 10); // CE, CSN
 
 const byte address[6] = "00001";
+int buffer[2];
 
 void setup() {
   radio.begin();
@@ -60,11 +61,11 @@ void loop() {
   digitalWrite(BLUE_PIN2, LOW);
 
   int potValueX = analogRead(inX); // Read joystick X value
-  int pwmOutputX = map(potValueX, 0, 1023, -15, 15); // Map the joystick X value from -10 to 10
+  int pwmOutputX = map(potValueX, 0, 1023, 0, 180); // Map the joystick X value from -10 to 10
   int potValueY = analogRead(inY); // Read joystick Y value
   int pwmOutputY = map(potValueY, 0, 1023, -255, 255); // Map the joystick Y value from -128 to 128
 
-  if (abs(pwmOutputX) > 2 || abs(pwmOutputY) > 5){
+  if (pwmOutputX > 95 || pwmOutputX < 85 || abs(pwmOutputY) > 5){
     digitalWrite(RED_PIN1, LOW);
     digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, HIGH);
@@ -74,6 +75,7 @@ void loop() {
     digitalWrite(BLUE_PIN1, LOW);
   }
 
-  const int buffer[2] = {pwmOutputX, pwmOutputY};
+  buffer[0] = pwmOutputX;
+  buffer[1] = pwmOutputY;
   radio.write(&buffer, sizeof(buffer));
 }

@@ -10,6 +10,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <Servo.h>
 
 #define enA 5 //L298N Enable/Speed
 #define in1 4 //L298N In1
@@ -19,10 +20,13 @@
 #define DCError 5
 
 RF24 radio(7, 8); // CE, CSN
+Servo ESC;
 
 const byte address[6] = "00001";
 
+int pwmOutputX;
 int pwmOutputY;
+
 int DCDir = 0; //L298N
 
 void setup() {
@@ -31,6 +35,8 @@ void setup() {
   // Set motors to stop initially
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
+
+  ESC.attach(2,1000,2000);
 
   radio.begin();
   radio.openReadingPipe(0, address);
@@ -45,8 +51,12 @@ void loop() {
     radio.read(&potVals, sizeof(potVals));
     //Serial.println(potVals);
 
+    pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
+    
+    Serial.println(pwmOutputX);
     Serial.println(pwmOutputY);
+    ESC.write(pwmOutputX);
     
     if (abs(pwmOutputY) < DCError && DCDir != 0){
       digitalWrite(in1, LOW);
