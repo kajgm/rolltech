@@ -26,6 +26,7 @@ const byte address[6] = "00001";
 
 int pwmOutputX;
 int pwmOutputY;
+int potVals[2];
 
 int DCDir = 0; //L298N
 
@@ -47,7 +48,7 @@ void setup() {
 void loop() {
 
   if (radio.available()) {
-    int potVals[2];
+    
     radio.read(&potVals, sizeof(potVals));
     //Serial.println(potVals);
 

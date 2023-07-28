@@ -28,6 +28,7 @@ const byte address[6] = "00001";
 int buffer[2];
 
 void setup() {
+  Serial.begin(19200);
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
@@ -78,4 +79,7 @@ void loop() {
   buffer[0] = pwmOutputX;
   buffer[1] = pwmOutputY;
   radio.write(&buffer, sizeof(buffer));
+
+  Serial.println(pwmOutputX);
+  Serial.println(pwmOutputY);
 }
