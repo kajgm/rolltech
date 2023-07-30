@@ -62,7 +62,14 @@ void loop() {
   digitalWrite(BLUE_PIN2, LOW);
 
   int potValueX = analogRead(inX); // Read joystick X value
-  int pwmOutputX = map(potValueX, 0, 1023, 0, 180); // Map the joystick X value from -10 to 10
+
+  //FULL POWER
+  //int pwmOutputX = map(potValueX, 0, 1023, 0, 180); // Map the joystick X value from 0 to 180
+
+  //LIMITED POWER
+  int pwmOutputX = map(potValueX, 0, 1023, -15, 15); // Map the joystick X value from -15 to 15
+  pwmOutputX += 90;
+
   int potValueY = analogRead(inY); // Read joystick Y value
   int pwmOutputY = map(potValueY, 0, 1023, -255, 255); // Map the joystick Y value from -128 to 128
 
