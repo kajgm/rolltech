@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ARDUINO_NANO")(type "KiCad")(uri "C:/Users/Kate Wang/OneDrive/Documents/KiCad/controller/arduinonano/ARDUINO_NANO.kicad_sym")(options "")(descr ""))
+  (lib (name "COM-09032")(type "KiCad")(uri "C:/Users/Kate Wang/OneDrive/Documents/KiCad/controller/joystick/COM-09032.kicad_sym")(options "")(descr ""))
+)
