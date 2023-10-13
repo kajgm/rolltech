@@ -37,7 +37,7 @@ void setup() {
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
 
-  ESC.attach(2,1000,2000);
+  ESC.attach(2, 1000, 3000);
 
   radio.begin();
   radio.openReadingPipe(0, address);
@@ -55,27 +55,27 @@ void loop() {
     pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
     
-    Serial.println(pwmOutputX);
     Serial.println(pwmOutputY);
-    ESC.write(pwmOutputX);
+
+    ESC.write(pwmOutputY);
     
-    if (abs(pwmOutputY) < DCError && DCDir != 0){
+    if (abs(pwmOutputX) < DCError && DCDir != 0){
       digitalWrite(in1, LOW);
       digitalWrite(in2, LOW);
       DCDir = 0;
 
-    } else if (pwmOutputY < 0 && DCDir != 1){
+    } else if (pwmOutputX < 0 && DCDir != 1){
       digitalWrite(in1, HIGH);
       digitalWrite(in2, LOW);
       DCDir = 1;
 
-    } else if (pwmOutputY > 0 && DCDir != -1) {
+    } else if (pwmOutputX > 0 && DCDir != -1) {
       digitalWrite(in1, LOW);
       digitalWrite(in2, HIGH);
       DCDir = -1;
     }
 
-    analogWrite(enA, abs(pwmOutputY)); // Send PWM signal to L298N Enable pin
+    analogWrite(enA, abs(pwmOutputX)); // Send PWM signal to L298N Enable pin
   }
 
 }

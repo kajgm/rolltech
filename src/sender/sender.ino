@@ -62,29 +62,33 @@ void loop() {
   digitalWrite(BLUE_PIN2, LOW);
 
   int potValueX = analogRead(inX); // Read joystick X value
-
-  //FULL POWER
-  //int pwmOutputX = map(potValueX, 0, 1023, 0, 180); // Map the joystick X value from 0 to 180
-
-  //LIMITED POWER
-  int pwmOutputX = map(potValueX, 0, 1023, -45, 45); // Map the joystick X value from -15 to 15
-  pwmOutputX += 90;
+  int pwmOutputX = map(potValueX, 0, 1023, -255, 255); // Map the joystick X value from -15 to 15
 
   int potValueY = analogRead(inY); // Read joystick Y value
-  int pwmOutputY = map(potValueY, 0, 1023, -255, 255); // Map the joystick Y value from -128 to 128
+  int pwmOutputY = map(potValueY, 0, 1023, 45, 135); // Map the joystick Y value from -128 to 128
 
-  if (pwmOutputX > 95 || pwmOutputX < 85 || abs(pwmOutputY) > 5){
+  if (abs(pwmOutputX) > 10){
+    buffer[0] = pwmOutputX;
     digitalWrite(RED_PIN1, LOW);
     digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, HIGH);
-  } else {
+  }
+  
+  if (abs(pwmOutputY-90) > 20){
+    buffer[1] = pwmOutputY;
+    digitalWrite(RED_PIN1, LOW);
+    digitalWrite(GREEN_PIN1, LOW);
+    digitalWrite(BLUE_PIN1, HIGH);
+  }
+
+  if((abs(pwmOutputX) < 10) && (abs(pwmOutputY-90) < 20)) {
+    buffer[0] = 0;
+    buffer[1] = 90;
     digitalWrite(RED_PIN1, LOW);
     digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, LOW);
   }
 
-  buffer[0] = pwmOutputX;
-  buffer[1] = pwmOutputY;
   radio.write(&buffer, sizeof(buffer));
 
   Serial.println(pwmOutputX);
