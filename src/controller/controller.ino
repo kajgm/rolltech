@@ -1,26 +1,5 @@
-/*
-* Arduino Wireless Communication Tutorial
-*     Example 1 - Transmitter Code
-*                
-* by Dejan Nedelkovski, www.HowToMechatronics.com
-* 
-* Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
-*/
+#include "defines.h"
 
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-
-#define inX 0 //Joystick X input
-#define inY 1 //Joystick Y input
-
-#define RED_PIN1 5
-#define GREEN_PIN1 6
-#define BLUE_PIN1 7
-
-#define RED_PIN2 2
-#define GREEN_PIN2 3
-#define BLUE_PIN2 4
 
 RF24 radio(9, 10); // CE, CSN
 
