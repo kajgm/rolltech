@@ -1,12 +1,3 @@
-/*
-* Arduino Wireless Communication Tutorial
-*       Example 1 - Receiver Code
-*                
-* by Dejan Nedelkovski, www.HowToMechatronics.com
-* 
-* Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
-*/
-
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
@@ -48,13 +39,17 @@ void loop() {
     pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
     
-    Serial.println(pwmOutputY);
-
-    ESC.write(pwmOutputY);
+    Serial.print("x:");
+    Serial.print(pwmOutputX);
+    Serial.print(" y:");
+    Serial.println(pwmOutputY); 
+    
     myservo.write(pwmOutputX);
+    ESC.write(pwmOutputY);
+    
   } else {
     ESC.write(90);
-    myservo.write(0);
+    myservo.write(60);
   }
 
 }
