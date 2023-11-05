@@ -55,37 +55,28 @@ void setup() {
 }
 
 void loop() {
-
   //assume full charge -will need to change
-  digitalWrite(RED_PIN2, LOW);
   digitalWrite(GREEN_PIN2, HIGH);
-  digitalWrite(BLUE_PIN2, LOW);
 
   int potValueX = analogRead(inX); // Read joystick X value
-  int pwmOutputX = map(potValueX, 0, 1023, -255, 255); // Map the joystick X value from -15 to 15
+  int pwmOutputX = map(potValueX, 0, 1023, 0, 120); // Map the joystick X value from -15 to 15
 
   int potValueY = analogRead(inY); // Read joystick Y value
   int pwmOutputY = map(potValueY, 0, 1023, 45, 135); // Map the joystick Y value from -128 to 128
 
   if (abs(pwmOutputX) > 10){
     buffer[0] = pwmOutputX;
-    digitalWrite(RED_PIN1, LOW);
-    digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, HIGH);
   }
   
   if (abs(pwmOutputY-90) > 20){
     buffer[1] = pwmOutputY;
-    digitalWrite(RED_PIN1, LOW);
-    digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, HIGH);
   }
 
   if((abs(pwmOutputX) < 10) && (abs(pwmOutputY-90) < 20)) {
     buffer[0] = 0;
     buffer[1] = 90;
-    digitalWrite(RED_PIN1, LOW);
-    digitalWrite(GREEN_PIN1, LOW);
     digitalWrite(BLUE_PIN1, LOW);
   }
 
