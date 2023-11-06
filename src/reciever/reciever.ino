@@ -7,7 +7,7 @@ RF24 radio(7, 8); // CE, CSN
 
 Servo ESC;
 Servo myservo;
-int pos = 0;
+int pos = 60;
 
 const byte address[6] = "00001";
 
