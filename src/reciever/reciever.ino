@@ -47,9 +47,5 @@ void loop() {
     myservo.write(pwmOutputX);
     ESC.write(pwmOutputY);
     
-  } else {
-    ESC.write(90);
-    myservo.write(60);
-  }
-
+  } 
 }
