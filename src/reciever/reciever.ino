@@ -23,6 +23,7 @@ void setup() {
   myservo.write(pos);
 
   ESC.attach(2, 1000, 3000);
+  ESC.write(90);
 
   radio.begin();
   radio.openReadingPipe(0, address);
@@ -47,5 +48,9 @@ void loop() {
     myservo.write(pwmOutputX);
     ESC.write(pwmOutputY);
     
-  } 
+  } else {
+    ESC.write(90);
+    myservo.write(60);
+  }
+
 }
