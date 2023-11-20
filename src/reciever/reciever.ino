@@ -25,6 +25,9 @@ void setup() {
   ESC.attach(2, 1000, 3000);
   ESC.write(90);
 
+  pwmOutputX = pos;
+  pwmOutputY = 90;
+
   radio.begin();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MIN);
@@ -32,25 +35,24 @@ void setup() {
 }
 
 void loop() {
-
   if (radio.available()) {
     radio.read(&potVals, sizeof(potVals));
     //Serial.println(potVals);
 
     pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
-    
-    Serial.print("x:");
-    Serial.print(pwmOutputX);
-    Serial.print(" y:");
-    Serial.println(pwmOutputY); 
-    
+
     myservo.write(pwmOutputX);
     ESC.write(pwmOutputY);
-    
+
   } else {
     ESC.write(90);
     myservo.write(60);
   }
 
+  delay(50);
+  Serial.print("x:");
+  Serial.print(pwmOutputX);
+  Serial.print(" y:");
+  Serial.println(pwmOutputY); 
 }

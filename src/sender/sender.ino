@@ -65,15 +65,15 @@ void loop() {
   int pwmOutputY = map(potValueY, 0, 1023, 45, 135); 
 
 
-  if (abs(pwmOutputX-60) <= 20 && pwmOutputY<70){
+  if (abs(pwmOutputX-60) <= 20 && pwmOutputY<80){
     //Forward
     buffer[0] = 60;
-    buffer[1] = pwmOutputY;
+    buffer[1] = 70;
     Serial.println("Forward");
-  } else if (abs(pwmOutputX-60) <= 20 && pwmOutputY>110) {
+  } else if (abs(pwmOutputX-60) <= 20 && pwmOutputY>100) {
     //Backward
     buffer[0] = 60;
-    buffer[1] = pwmOutputY;
+    buffer[1] = 110;
     Serial.println("Backward");
   } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 20) {
     // right
