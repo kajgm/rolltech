@@ -23,6 +23,7 @@ void setup() {
   myservo.write(pos);
 
   ESC.attach(2, 1000, 3000);
+  ESC.write(90);
 
   radio.begin();
   radio.openReadingPipe(0, address);
