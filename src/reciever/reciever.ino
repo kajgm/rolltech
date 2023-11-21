@@ -13,6 +13,7 @@ const byte address[6] = "00001";
 
 int pwmOutputX;
 int pwmOutputY;
+int currentSpeed; 
 int potVals[2];
 
 void setup() {
@@ -25,6 +26,10 @@ void setup() {
   ESC.attach(2, 1000, 3000);
   ESC.write(90);
 
+  pwmOutputX = 60;
+  pwmOutputY = 90;
+  currentSpeed = 90;
+
   radio.begin();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MIN);
@@ -32,25 +37,35 @@ void setup() {
 }
 
 void loop() {
-
   if (radio.available()) {
     radio.read(&potVals, sizeof(potVals));
-    //Serial.println(potVals);
 
     pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
     
-    Serial.print("x:");
-    Serial.print(pwmOutputX);
-    Serial.print(" y:");
-    Serial.println(pwmOutputY); 
-    
     myservo.write(pwmOutputX);
-    ESC.write(pwmOutputY);
+    accel(currentSpeed, pwmOutputY);
     
   } else {
-    ESC.write(90);
-    myservo.write(60);
+    pwmOutputY = 90;
+    pwmOutputX = 60;
+    accel(currentSpeed, pwmOutputY);
+    myservo.write(pwmOutputX);
   }
+  currentSpeed = pwmOutputY;
+  Serial.print("x:");
+    Serial.print(pwmOutputX);
+    Serial.print(" y:");
+    Serial.println(pwmOutputY);
+}
+
+void accel(int speed, int newSpeed) {
+  if (speed < newSpeed) {
+    speed += 5;
+  } else if (speed > newSpeed){
+    speed -= 5;
+  }
+  ESC.write(speed);
+  delay(100);
 
 }
