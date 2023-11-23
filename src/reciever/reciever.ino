@@ -44,7 +44,20 @@ void loop() {
     pwmOutputY = potVals[1];
     
     myservo.write(pwmOutputX);
-    accel(currentSpeed, pwmOutputY);
+
+    if(abs(currentSpeed - pwmOutputY) > 30) {
+      ESC.write(90);
+      currentSpeed = 90;
+      delay(100);
+      //ESC.write(pwmOutputY);
+      accel(currentSpeed, pwmOutputY);
+    }
+    else {
+      //ESC.write(pwmOutputY);
+      accel(currentSpeed, pwmOutputY);
+    }
+    delay(50);
+    //accel(currentSpeed, pwmOutputY);
     
   } else {
     pwmOutputY = 90;
@@ -53,7 +66,8 @@ void loop() {
     myservo.write(pwmOutputX);
   }
   currentSpeed = pwmOutputY;
-  Serial.print("x:");
+
+    Serial.print("x:");
     Serial.print(pwmOutputX);
     Serial.print(" y:");
     Serial.println(pwmOutputY);
@@ -66,6 +80,6 @@ void accel(int speed, int newSpeed) {
     speed -= 5;
   }
   ESC.write(speed);
-  delay(100);
+  delay(10);
 
 }

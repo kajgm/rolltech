@@ -29,29 +29,14 @@ int buffer[2];
 
 void setup() {
   Serial.begin(19200);
+
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
   radio.stopListening();
 
-  //setup led pins 1 and 2
-  pinMode(RED_PIN1, OUTPUT);
-  pinMode(GREEN_PIN1, OUTPUT);
-  pinMode(BLUE_PIN1, OUTPUT);
-
-  pinMode(RED_PIN2, OUTPUT);
-  pinMode(GREEN_PIN2, OUTPUT);
-  pinMode(BLUE_PIN2, OUTPUT);
-
-  //set leds to off
-  digitalWrite(RED_PIN1, LOW);
-  digitalWrite(GREEN_PIN1, LOW);
-  digitalWrite(BLUE_PIN1, LOW);
-
-  digitalWrite(RED_PIN2, LOW);
-  digitalWrite(GREEN_PIN2, LOW);
-  digitalWrite(BLUE_PIN2, LOW);
-
+  init_LED(RED_PIN1, BLUE_PIN1, GREEN_PIN1);
+  init_LED(RED_PIN2, BLUE_PIN2, GREEN_PIN2);
 }
 
 void loop() {
@@ -118,4 +103,15 @@ void loop() {
   // Serial.print(pwmOutputX);
   // Serial.print(" y:");
   // Serial.println(pwmOutputY); 
+}
+
+void init_LED(int red, int blue, int green) {
+  //setup led pins 1 and 2
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
+
+  digitalWrite(red, LOW);
+  digitalWrite(green, LOW);
+  digitalWrite(blue, LOW);
 }
