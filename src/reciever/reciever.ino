@@ -8,12 +8,12 @@ RF24 radio(7, 8); // CE, CSN
 Servo ESC;
 Servo myservo;
 int pos = 60;
+int stopCounter = 0;
 
 const byte address[6] = "00001";
 
 int pwmOutputX;
 int pwmOutputY;
-int currentSpeed; 
 int potVals[2];
 
 void setup() {
@@ -26,10 +26,10 @@ void setup() {
   ESC.attach(2, 1000, 3000);
   ESC.write(90);
 
-  pwmOutputX = 60;
+  pwmOutputX = pos;
   pwmOutputY = 90;
-  currentSpeed = 90;
 
+  stopCounter = 0;
   radio.begin();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MIN);
@@ -38,48 +38,30 @@ void setup() {
 
 void loop() {
   if (radio.available()) {
+    stopCounter = 0;
     radio.read(&potVals, sizeof(potVals));
+    //Serial.println(potVals);
 
     pwmOutputX = potVals[0];
     pwmOutputY = potVals[1];
-    
-    myservo.write(pwmOutputX);
 
-    if(abs(currentSpeed - pwmOutputY) > 30) {
-      ESC.write(90);
-      currentSpeed = 90;
-      delay(100);
-      //ESC.write(pwmOutputY);
-      accel(currentSpeed, pwmOutputY);
-    }
-    else {
-      //ESC.write(pwmOutputY);
-      accel(currentSpeed, pwmOutputY);
-    }
-    delay(50);
-    //accel(currentSpeed, pwmOutputY);
-    
-  } else {
-    pwmOutputY = 90;
-    pwmOutputX = 60;
-    accel(currentSpeed, pwmOutputY);
     myservo.write(pwmOutputX);
-  }
-  currentSpeed = pwmOutputY;
+    ESC.write(pwmOutputY);
 
     Serial.print("x:");
     Serial.print(pwmOutputX);
     Serial.print(" y:");
-    Serial.println(pwmOutputY);
-}
+    Serial.println(pwmOutputY); 
+    delay(50);
+  } else {
+    stopCounter++;
+    if(stopCounter > 250){
+      ESC.write(90);
+      myservo.write(60);
+      Serial.println("-------------STOP LOST SIGNAL------------");
+    }
+    delay(1);
 
-void accel(int speed, int newSpeed) {
-  if (speed < newSpeed) {
-    speed += 5;
-  } else if (speed > newSpeed){
-    speed -= 5;
   }
-  ESC.write(speed);
-  delay(10);
-
+  
 }

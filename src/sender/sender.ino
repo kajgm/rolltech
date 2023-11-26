@@ -26,6 +26,8 @@ RF24 radio(9, 10); // CE, CSN
 
 const byte address[6] = "00001";
 int buffer[2];
+int currentSpeed = 90;
+int currentDir = 60;
 
 void setup() {
   Serial.begin(19200);
@@ -37,6 +39,9 @@ void setup() {
 
   init_LED(RED_PIN1, BLUE_PIN1, GREEN_PIN1);
   init_LED(RED_PIN2, BLUE_PIN2, GREEN_PIN2);
+
+  currentSpeed = 90; 
+  currentDir = 60;
 }
 
 void loop() {
@@ -50,59 +55,79 @@ void loop() {
   int pwmOutputY = map(potValueY, 0, 1023, 45, 135); 
 
 
-  if (abs(pwmOutputX-60) <= 20 && pwmOutputY<70){
-    //Forward
-    buffer[0] = 60;
-    buffer[1] = pwmOutputY;
-    Serial.println("Forward");
-  } else if (abs(pwmOutputX-60) <= 20 && pwmOutputY>110) {
+
+  if (abs(pwmOutputX-60) <= 40 && pwmOutputY<70) {
+    //Right
+    currentDir = 0;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(80);
+    Serial.println("Right");
+  } else if (abs(pwmOutputX-60) <= 40 && pwmOutputY>110) {
+    //Left
+    currentDir = 120;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(80);
+    Serial.println("Left");
+
+  } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 40) {
     //Backward
-    buffer[0] = 60;
-    buffer[1] = pwmOutputY;
+    currentDir = 60;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(80);
     Serial.println("Backward");
-  } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 20) {
-    // right
-    buffer[0] = 120;
-    buffer[1] = 60;
-    Serial.println("right");
-  } else if (pwmOutputX < 40 && abs(pwmOutputY-90) <= 20) {
-    //left
-    buffer[0] = 0;
-    buffer[1] = 60;
-    Serial.println("left");
+  } else if (pwmOutputX < 40 && abs(pwmOutputY-90) <= 40) {
+    //Forward
+    currentDir = 60;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(100);
+    Serial.println("Forward");
   } else if (pwmOutputX > 80 && pwmOutputY < 70) {
-    //forward right
-    buffer[0] = 90;
-    buffer[1] = 60;
-    Serial.println("forward right");
-  } else if (pwmOutputX < 40 && pwmOutputY < 70) {
-    //forward left
-    buffer[0] = 30;
-    buffer[1] = 60;
-    Serial.println("forward left");
-  } else if (pwmOutputX > 80 && pwmOutputY > 110) {
     //backward right
-    buffer[0] = 30;
-    buffer[1] = 120;
+    currentDir = 30;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(80);
     Serial.println("backward right");
-  } else if (pwmOutputX < 40 && pwmOutputY > 110) {
+    
+  } else if (pwmOutputX < 40 && pwmOutputY < 70) {
+    //forward right
+    currentDir = 90;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(100);
+    Serial.println("forward right");
+  } else if (pwmOutputX > 80 && pwmOutputY > 110) {
     //backward left
-    buffer[0] = 90;
-    buffer[1] = 120;
+    currentDir = 90;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(80);
     Serial.println("backward left");
-  } else {
+  } else if (pwmOutputX < 40 && pwmOutputY > 110) {
+    //forward left
+    currentDir = 30;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(100);
+    Serial.println("forward left");
+  } 
+  else {
     // No movement
-    buffer[0] = 60;
-    buffer[1] = 90;
-    Serial.println("No movement");
+    if(currentSpeed != 90 && currentDir != 60) {
+      buffer[0] = currentDir;
+    } else {
+      buffer[0] = 60;
+    }
+    buffer[1] = changeSpeed(90);
+    //Serial.print("No movement:");
+    //Serial.println(currentSpeed);
+
   }
 
   radio.write(&buffer, sizeof(buffer));
+
+  delay(50);
   
-  // Serial.print("x:");
-  // Serial.print(pwmOutputX);
-  // Serial.print(" y:");
-  // Serial.println(pwmOutputY); 
+  Serial.print("x:");
+  Serial.print(pwmOutputX);
+  Serial.print(" y:");
+  Serial.println(pwmOutputY); 
 }
 
 void init_LED(int red, int blue, int green) {
@@ -114,4 +139,19 @@ void init_LED(int red, int blue, int green) {
   digitalWrite(red, LOW);
   digitalWrite(green, LOW);
   digitalWrite(blue, LOW);
+}
+
+
+int changeSpeed(int finalSpeed) {
+  int tmp_curSpeed = 0; 
+
+  if(finalSpeed > currentSpeed) {
+    tmp_curSpeed = currentSpeed++;
+  } else if (finalSpeed < currentSpeed) {
+    tmp_curSpeed = currentSpeed--;
+  } else {
+    tmp_curSpeed = currentSpeed;
+  }
+
+  return tmp_curSpeed;
 }
