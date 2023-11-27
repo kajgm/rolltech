@@ -63,55 +63,54 @@ void loop() {
   }
 
   if (abs(pwmOutputX-60) <= 40 && pwmOutputY<70) {
-    //Right
-    currentDir = 0;
-    buffer[0] = currentDir;
-    buffer[1] = changeSpeed(75);
-    Serial.println("Right");
-  } else if (abs(pwmOutputX-60) <= 40 && pwmOutputY>110) {
     //Left
     currentDir = 120;
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(75);
     Serial.println("Left");
-
-  } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 40) {
-    //Backward
-    currentDir = 60;
+  } else if (abs(pwmOutputX-60) <= 40 && pwmOutputY>110) {
+    //Right
+    currentDir = 0;
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(75);
-    Serial.println("Backward");
-  } else if (pwmOutputX < 40 && abs(pwmOutputY-90) <= 40) {
+    Serial.println("Right");
+  } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 40) {
     //Forward
     currentDir = 60;
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(105);
     Serial.println("Forward");
+  } else if (pwmOutputX < 40 && abs(pwmOutputY-90) <= 40) {
+    //Backward
+    currentDir = 60;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(75);
+    Serial.println("Backward");
   } else if (pwmOutputX > 80 && pwmOutputY < 70) {
-    //backward right
-    currentDir = 30;
-    buffer[0] = currentDir;
-    buffer[1] = changeSpeed(75);
-    Serial.println("backward right");
-    
-  } else if (pwmOutputX < 40 && pwmOutputY < 70) {
-    //forward right
-    currentDir = 90;
-    buffer[0] = currentDir;
-    buffer[1] = changeSpeed(105);
-    Serial.println("forward right");
-  } else if (pwmOutputX > 80 && pwmOutputY > 110) {
-    //backward left
-    currentDir = 90;
-    buffer[0] = currentDir;
-    buffer[1] = changeSpeed(75);
-    Serial.println("backward left");
-  } else if (pwmOutputX < 40 && pwmOutputY > 110) {
     //forward left
     currentDir = 30;
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(105);
     Serial.println("forward left");
+  } else if (pwmOutputX < 40 && pwmOutputY < 70) {
+    //backward left
+    currentDir = 90;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(75);
+    Serial.println("backward left");
+  } else if (pwmOutputX > 80 && pwmOutputY > 110) {
+    //forward right
+    currentDir = 90;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(105);
+    Serial.println("forward right");
+    
+  } else if (pwmOutputX < 40 && pwmOutputY > 110) {
+    //backward right
+    currentDir = 30;
+    buffer[0] = currentDir;
+    buffer[1] = changeSpeed(75);
+    Serial.println("backward right");
   } 
   else {
     // No movement
