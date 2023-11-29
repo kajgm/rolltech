@@ -1,3 +1,12 @@
+/*
+* Arduino Wireless Communication Tutorial
+*     Example 1 - Transmitter Code
+*                
+* by Dejan Nedelkovski, www.HowToMechatronics.com
+* 
+* Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
+*/
+
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
@@ -54,17 +63,17 @@ void loop() {
   }
 
   if (abs(pwmOutputX-60) <= 40 && pwmOutputY<70) {
-    //Right
+    //Left
     currentDir = 0;
     buffer[0] = currentDir;
-    buffer[1] = changeSpeed(75);
-    Serial.println("Right");
+    buffer[1] = changeSpeed(105);
+    Serial.println("Left");
   } else if (abs(pwmOutputX-60) <= 40 && pwmOutputY>110) {
-    //Left
+    //Right
     currentDir = 120;
     buffer[0] = currentDir;
-    buffer[1] = changeSpeed(75);
-    Serial.println("Left");
+    buffer[1] = changeSpeed(105);
+    Serial.println("Right");
   } else if (pwmOutputX > 80 && abs(pwmOutputY-90) <= 40) {
     //Backward
     currentDir = 60;
@@ -83,6 +92,7 @@ void loop() {
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(75);
     Serial.println("backward right");
+    
   } else if (pwmOutputX < 40 && pwmOutputY < 70) {
     //forward left
     currentDir = 30;
@@ -101,6 +111,7 @@ void loop() {
     buffer[0] = currentDir;
     buffer[1] = changeSpeed(105);
     Serial.println("forward right");
+
   } 
   else {
     // No movement
@@ -112,6 +123,7 @@ void loop() {
     buffer[1] = changeSpeed(90);
     //Serial.print("No movement:");
     //Serial.println(currentSpeed);
+
   }
 
   radio.write(&buffer, sizeof(buffer));
