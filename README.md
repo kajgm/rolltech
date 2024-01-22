@@ -10,6 +10,7 @@ Roll Technology presents Chairable, a revolutionary product designed to explore 
 - Operated remotely using a tailored PCB design, a custom controller casing, and a specifically crafted low-power circuit.
 
 ![Logo](docs/img/png/title.png)
+![Graphical Abstract](docs/img/png/graphicalabs.png)
 
 ## About
 
