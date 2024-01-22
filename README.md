@@ -15,3 +15,10 @@ Roll Technology presents Chairable, a revolutionary product designed to explore 
 ## About
 
 Roll Technology is a Simon Fraser University based Capstone Project group comprised of 5 5th year engineering students.
+
+## Folder structure
+
+- PCB - Custom pcb design documents including KiCad schematics
+- docs - Design related documentation, company branding, and user manual
+- solidworks - Solidworks .STL and .SLDPRT files as well as drawn diagrams
+- src - Arduino code relating to the controller device communication and logic
