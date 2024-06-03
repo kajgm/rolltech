@@ -14,7 +14,7 @@ Roll Technology presents Chairable, a revolutionary product designed to explore 
 
 ## About
 
-Roll Technology is a Simon Fraser University based Capstone Project group comprised of five 5th year engineering students.
+Roll Technology is a [Simon Fraser University based Capstone Project](https://summit.sfu.ca/person/81237) group comprised of five 5th year engineering students.
 
 ## Folder structure
 
